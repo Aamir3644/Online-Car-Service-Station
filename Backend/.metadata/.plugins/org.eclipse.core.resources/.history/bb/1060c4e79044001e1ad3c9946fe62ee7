@@ -1,0 +1,54 @@
+package com.app.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.app.pojo.Cart;
+import com.app.pojo.Services;
+import com.app.service.CartService;
+
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping("/cart")
+public class CartController {
+
+	@Autowired
+	private CartService service;
+	
+	@PostMapping
+	public void addToCart(@RequestBody Map<String, Long> request)
+	{
+		System.out.println();
+		Long service_id = request.get("serviceId");
+	    Long user_id = request.get("userId");
+	    System.out.println(service_id);
+	    System.out.println(user_id);
+		return new ResponseEntity<>(service.addToCart(service_id, user_id);
+	}
+	
+	@DeleteMapping
+	public int deleteFromCart(@RequestBody Map<String, Long> request) 
+	{
+		Long serviceId = request.get("serviceId");
+	    Long userId = request.get("userId");
+		return service.deleteFromCart(serviceId, userId);
+	}
+	
+	@GetMapping
+	public List<Services> getCartItemsById(Long userId)
+	{
+		return service.getCartItemsById(userId);
+	}
+	
+}

@@ -1,0 +1,30 @@
+package com.app.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.app.dao.CartDao;
+import com.app.pojo.Cart;
+
+@Service
+@Transactional
+public class CartService {
+
+	@Autowired
+	private CartDao dao;
+	
+	public Cart addToCart(Cart cart) {
+		return dao.save(cart);
+	}
+	
+	public int deleteFromCart(Long serviceId, Long userId) {
+		return dao.deleteFromCart(serviceId, userId);
+	}
+	
+	public List<Cart> getCartItemsById(Long userId)
+	{
+		
+	}
+	
+}
