@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
+body {
+  font-family: 'Josefin Sans', cursive;
+}
+
+.row {
+  margin-bottom: 20px;
+}
+
+h1,
+h2,
+h3 {
+  color: #333;
+}
+
+form-control {
+  margin-bottom: 10px;
+}

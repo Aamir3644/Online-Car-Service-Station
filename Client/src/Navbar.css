@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
+body {
+  font-family: 'Josefin Sans', cursive;
+}
+
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Navigation bar styles */
+.navbar {
+  background-color: #000000; /* Black background color */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+}
+
+/* .navbar-logo img {
+  
+  height: 30px; /* Adjust the height of the logo as needed } */
+
+.navbar-brand {
+  font-size: 24px;
+  color: #ffffff; /* White text color */
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.navbar-nav {
+  display: flex;
+  list-style-type: none;
+  margin-left: auto;
+}
+
+.navbar-nav.active {
+  display: flex; /* Show navigation links when active class is added */
+  flex-direction: column;
+  position: absolute;
+  top: 60px; /* Adjust as needed */
+  left: 0;
+  background-color: #000000; /* Black background color */
+  width: 100%;
+}
+
+.navbar-nav li {
+  margin: 0 10px;
+}
+
+.navbar-nav li a {
+  color: #ffffff; /* White text color */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav li a:hover {
+  color: #4dc24d; /* Green text color on hover */
+}
+
+/* Hamburger Icon */
+.navbar-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none; /* Hide by default */
+}
+
+.navbar-toggle.active .bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.navbar-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-toggle.active .bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-content {
+    margin: 0 10px;
+  }
+
+  .navbar-logo img {
+    height: 25px; /* Adjust the height of the logo as needed */
+  }
+
+  .navbar-brand {
+    font-size: 20px;
+    margin-left: 5px;
+  }
+
+  .navbar-nav {
+    margin-top: 10px;
+  }
+
+  .navbar-nav li {
+    margin: 5px 0;
+  }
+
+  .navbar-toggle {
+    display: block; /* Show only on small screens */
+  }
+}
