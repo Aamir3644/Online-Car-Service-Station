@@ -12,12 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify'
 import { getManufac, getModelById, getOutlets, getServices, addToCart, RemoveFromCart, getCartById } from './services/user'
 
-// import * as React from 'react';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import FormControl from '@mui/material/FormControl';
-// import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function ServicesPage() {
   
@@ -31,17 +25,16 @@ export default function ServicesPage() {
     
   const [outlets, setOutlets] = useState([]);
   const [selectedOutlet, setSelectedOutlet] = useState('');
-
+  
   const [cartItems, setCartItems] = useState([]);
   
-  
-  // const cars = ['Skoda', 'Jeep', 'Volvo'];
   const [cars,setCars] = useState([]);
-
+  const [carModels,setCarModels] = useState([]);
+  
   useEffect(() => {   
     const fetchData = async () => {
       try {
-
+        
         const response = await getManufac();
         const response2 = await getOutlets();
         const response3 = await getServices();
@@ -49,8 +42,8 @@ export default function ServicesPage() {
         console.log("data", response.data);
         console.log("data", response2.data);
         console.log("data of services : ", response3.data);
-        //const manufacturerNames = response.data.map(item => item.manufacturerName);
-        setCars(/*manufacturerNames*/response.data);
+        
+        setCars(response.data);
         debugger;
         setOutlets(response2.data);
         setServices(response3.data);
@@ -71,12 +64,6 @@ export default function ServicesPage() {
     fetchData();
   }, [])
 
-  // const carModels = {
-  //   'Skoda': ['Skoda Kushaq', 'Skoda Kodiaq', 'Skoda Rapid'],
-  //   'Jeep': ['Jeep Compass', 'Jeep Grand Cherokee', 'Jeep Avenger'],
-  //   'Volvo': ['Volvo S60', 'Volvo S90', 'Volvo EX90'],
-  // };
-  const [carModels,setCarModels] = useState([]);
 
   useEffect(() => {
     const fetchCarModels = async () => {
@@ -101,17 +88,23 @@ export default function ServicesPage() {
 
   const history = useHistory();
 
-  const handleOutletChange = (event) => {
-    setSelectedOutlet(event.target.value);
+  const handleOutletChange = (args) => {
+    setSelectedOutlet(args.target.value);
+    console.log("selected outlet info - ", args.target.value)
+    // sessionStorage['outlet'] = args.target.value;
   };
 
   const handleCarChange = (args) => {
     setSelectedCar(args.target.value);
     setSelectedModel('');
+    console.log("selected manufacturer info - ", args.target.value)
+    // sessionStorage['car'] = args.target.value;
   };
 
   const handleModelChange = (args) => {
     setSelectedModel(args.target.value);
+    console.log("selected model info - ", args.target.value)
+    // sessionStorage['model'] = args.target.value;
   };
 
 
@@ -150,7 +143,17 @@ export default function ServicesPage() {
 
 
   const GoToPayments = () =>{
-    history.push("/Payments");
+
+    if (!selectedCar || !selectedModel || !selectedOutlet) {
+      toast.error('Please select a car manufacturer, model, and outlet before proceeding.');
+      return;
+    }
+    
+    history.push("/Payments", {
+      car: selectedCar,
+      model: selectedModel,
+      outlet: selectedOutlet,
+    });
   }
 
   return (
@@ -175,31 +178,12 @@ export default function ServicesPage() {
                   >
                     <option value="">Select Car</option>
                     {cars.map((car) => (
-                      <option key={car.id} value={car.id}>
+                      <option key={car.manufacturerId} value={car.manufacturerId}>
                         {car.manufacturerName}
                       </option>
                     ))}
                   </select>
-                  {/* <FormControl required sx={{ m: 1, minWidth: 250 }}>
-  <InputLabel id="selectCar-label">Select Car</InputLabel>
-  <Select
-    labelId="selectCar-label"
-    id="selectCar"
-    label="Select Car *"
-    value={selectedCar}
-    onChange={handleCarChange}
-  >
-    <MenuItem value="">
-      <em>Select Car</em>
-    </MenuItem>
-    {cars.map((car) => (
-      <MenuItem key={car.id} value={car.id}>
-        {car.manufacturerName}
-      </MenuItem>
-    ))}
-  </Select>
-  <FormHelperText>Required</FormHelperText>
-</FormControl> */}
+                  {}
                 </div>
                 <div className="form-group mt-4">
                   <label htmlFor="selectModel">Select a Model:</label>
@@ -210,20 +194,12 @@ export default function ServicesPage() {
                     onChange={handleModelChange}
                     disabled={!selectedCar}
                   >
-                    {/* <option value="">Select Model</option>
-                    {selectedCar &&
-                      carModels[selectedCar].map((model, index) => (
-                        <option key={index} value={model}>
-                          {model}
-                        </option>
-                      ))}
-                  </select>
-                </div> */}
                     <option value="">Select Model</option>
                     {selectedCar &&
                       carModels.map((model, index) => (     
-                        <option key={index} value={model}>
-                          {model}
+                        <option key={index} value={model.modelId}>
+                          {model.modelName}
+                          {console.log("model object -",model.modelId)}
                         </option>
                       ))}
                   </select>
@@ -241,9 +217,8 @@ export default function ServicesPage() {
                     >
                       <option value="">Select Outlet</option>
                       {outlets.map((outlet,index) => (
-                        <option key={index} value={outlet.name}>
+                        <option key={index} value={outlet.outletId}>
                           {outlet.name} - {outlet.address}
-                        {console.log("xyx",outlet.name)}
                         </option>
                       ))}
                     </select>

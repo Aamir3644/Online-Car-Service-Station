@@ -1,10 +1,10 @@
 import { useState , useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory  } from 'react-router-dom';
-import { toast } from 'react-toastify'
-import { login } from './features/authSlice'
-import { loginUser as loginUserApi } from './services/user'
-export default function SignIn()
+import { toast } from 'react-toastify';
+import { login } from './features/authSlice';
+import { loginUser as loginUserApi } from './services/user';
+ export default function SignIn()
 { 
 
   const [email, setEmail] = useState('')
@@ -18,41 +18,44 @@ export default function SignIn()
   const dispatch = useDispatch()
 
   const loginUser = async () => {
-    if (email.length == '') {
-      toast.error('Please enter email')
-    } else if (password.length == '') {
-      toast.error('Please enter password')
-    } else {
-      // call register api
-      const response = await loginUserApi(email, password)
-      console.log(response);
-      // parse the response
-      if (response['status'] == 200) {
-        // parse the response's data and extract the token
-        // Login successful
-        const userData = response.data; // Assuming the API response contains user data
-        console.log(userData)
-        setUser(userData); // Store user data in state
-        console.log("cute",user.fname)
-        // store the token for making other apis
-        // sessionStorage['token'] = true
-        sessionStorage['userId'] = userData.userId
-        sessionStorage['fname'] = userData.fname
-        sessionStorage['lname'] = userData.lname
-        sessionStorage['role'] = userData.role
+    if (email.length === '' || password.length === '') {
+      toast.error('Please enter both email and password');
+      return;
+    }
+
+    try {
+      // call login API
+      const response = await loginUserApi(email, password);
+
+      if (response.status === 200) {
+        const { token, user } = response.data; // Destructure token and user from the response
+
+        // Store token and user data in sessionStorage or localStorage
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('userId', user.userId);
+        sessionStorage.setItem('fname', user.fname);
+        sessionStorage.setItem('lname', user.lname);
+        sessionStorage.setItem('role', user.role);
+        sessionStorage.setItem('email', user.email);
 
         // update global store's authSlice with status = true
-        dispatch(login())
+        dispatch(login());
 
-        toast.success(`Welcome ${userData .fname} to Garage Masters`)
+        toast.success(`Welcome ${user.fname} to Garage Masters`);
 
-        // go back to login
-        //Later I have to add the logic of knowing its a Admin or Customer and Route according to it
-        //
-        history.push('/Services')
+        if (user.role === 'ROLE_ADMIN') {
+          // Assuming outlet information is present in the user object
+          sessionStorage.setItem('outletId', user.outlet ? user.outlet.outletId : null);
+          history.push('/Dashboard');
+        } else {
+          history.push('/Services');
+        }
       } else {
-        toast.error('Invalid user name or password')
+        toast.error('Invalid user name or password');
       }
+    } catch (error) {
+      console.error('Error during login:', error.response.data);
+      toast.error('An error occurred during login');
     }
   }
 

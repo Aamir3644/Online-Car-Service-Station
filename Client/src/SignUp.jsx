@@ -11,7 +11,7 @@ export default function SignUp()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [role, setRole] = useState(null)
+  const [role, setRole] = useState('Customer')
   const [outlet_id, setOutlet] = useState(null)
 
   // get the navigation object
@@ -32,13 +32,15 @@ export default function SignUp()
       toast.error('Password does not match')
     } else {
       // call register api
+      setOutlet(1);
+      console.log(outlet_id);
       const response = await registerUserApi(
         fname,
         lname,
         email,
         password,
         role,
-        outlet_id
+        outlet_id 
       )
         console.log(response);
       // parse the response

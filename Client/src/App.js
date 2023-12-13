@@ -6,6 +6,8 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Payments from './Payments';
 import Profile from './Profile';
+import Dashboard from './Dashboard';
+import PaymentList from './PaymentList';
 
 // used to register react-toastify
 
@@ -24,7 +26,9 @@ export default function App()
         <Route exact path="/Login" component={SignIn}></Route>
         <Route exact path="/SignUp" component={SignUp}></Route>
         <Route exact path="/Payments" component={Payments}></Route>
-        {/* <Route exact path="/Profile" component={Profile}></Route> */}
+        <Route exact path="/Profile" component={Profile}></Route>
+        <Route exact path="/Dashboard" component={Dashboard}></Route>
+        <Route exact path="/PaymentList" component={PaymentList}></Route>
         </Switch>
       </Router>
       <ToastContainer />

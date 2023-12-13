@@ -7,12 +7,15 @@ import Navbar2 from './Navbar2';
 import Footer from './Footer';
 import { toast } from 'react-toastify'
 import {useHistory} from 'react-router-dom';
+import {saveAppointment,deleteFromCartForUser} from './services/user';
 
-const Payments = () => {
+const Payments = (props) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const totalAmount = 100; // Example amount
+  const totalAmount = 100;
+  const { car, model, outlet } = props.location.state;
+  const userId = sessionStorage.getItem('userId');
 
   const history = useHistory();
 
@@ -22,6 +25,7 @@ const Payments = () => {
     { name: 'Google Pay', image: gpay },
     // ... More payment methods
   ];
+
 
   const today = new Date();
   const currentHour = today.getHours();
@@ -52,13 +56,26 @@ const Payments = () => {
     }
   };
 
-  const confirmPayment = () => {
-    // Simulate payment confirmation
-    console.log('Payment confirmed');
-    toast.success(`Payment Confirmed and Appointment Booked !!`);
-    history.push('/')
-    // You can then proceed to store the payment details and associated appointment ID on your backend
-  };
+  const confirmPayment = async () => {
+    console.log(selectedDate);
+    console.log(selectedTime);
+    console.log(selectedPaymentMethod);
+
+      const response = await saveAppointment(
+        selectedDate, selectedTime, false , userId , outlet, car, model
+      );
+
+      const response1 = await deleteFromCartForUser(userId);
+    
+      console.log(response);
+      if (response != null) {
+        toast.success(`Payment Confirmed and Appointment Booked !!`);
+        history.push('/');
+      } else {
+        toast.error('Error while booking appointment...');
+      }
+    
+};
 
   return (
     <>

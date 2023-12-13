@@ -1,31 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from './images/Logo2.png';
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
   const [isNavActive, setNavActive] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const history = useHistory()
+  const history = useHistory();
 
   const toggleNav = () => {
     setNavActive(!isNavActive);
   };
 
-  const GoToServices = () =>{
+  const GoToServices = () => {
     history.push("/Services");
-  }
+  };
 
-  const GoToHome = () =>{
+  const GoToHome = () => {
     history.push("/");
-  }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark ">
+    <nav className={`navbar navbar-expand-lg navbar-dark ${isScrolled ? 'fixed-top' : ''}`}>
       <div className="container-fluid">
         <a onClick={GoToHome} className="navbar-brand">
-          <img src={Logo} alt="Logo" className="navbar-logo" width="140" height="auto" align="left"/>
-          
+          <img src={Logo} alt="Logo" className="navbar-logo" width="140" height="auto" align="left" />
         </a>
         <button
           className={`navbar-toggler ${isNavActive ? 'active' : ''}`}
@@ -41,9 +57,9 @@ function Navbar() {
         </button>
         <div className={`collapse navbar-collapse ${isNavActive ? 'show' : ''}`} id="navbarNav">
           <ul className="navbar-nav ms-auto">
-          <li className="nav-item"><a /*href="/"*/ onClick={GoToHome} className="nav-link">Home</a></li>
-            <li className="nav-item"><a /*href="/Services"*/ onClick={GoToServices} className="nav-link">Services</a></li>
-            <li className="nav-item"><a /*href="/#"*/ className="nav-link">Contact Us</a></li>
+            <li className="nav-item"><a onClick={GoToHome} className="nav-link">Home</a></li>
+            <li className="nav-item"><a onClick={GoToServices} className="nav-link">Services</a></li>
+            {/* <li className="nav-item"><a className="nav-link">Contact Us</a></li> */}
             <li className="nav-item"><a href="/Login" className="nav-link">Log In</a></li>
           </ul>
         </div>
